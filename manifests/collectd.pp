@@ -11,7 +11,6 @@ exec { 'download-collectd':
     command => '/usr/bin/wget \'http://collectd.org/files/collectd-5.1.1.tar.gz\'',
 	timeout => 5000,
   }
-}
 
 exec { 'unzip-collectd':
     cwd     => '/opt/collectd',
