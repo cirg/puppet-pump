@@ -31,14 +31,14 @@ class pump::statsd {
   
   exec{ "nodejs-install-3":
     cwd => '/opt/node',
-    command => 'make', 
+    command => './make', 
     logoutput => 'on_failure',
 	require => Exec['nodejs-install-2'],
   }
   
   exec{ "nodejs-install-4":
     cwd => '/opt/node',
-    command => 'make install', 
+    command => './make install', 
     logoutput => 'on_failure',
 	require => Exec['nodejs-install-3'],
   }
