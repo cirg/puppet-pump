@@ -24,21 +24,21 @@ class pump::statsd {
   
   exec{ "nodejs-install-2":
     cwd => '/opt/node',
-    command => './configure --prefix=/opt/node', 
+    command => '/opt/node/configure --prefix=/opt/node', 
     logoutput => 'on_failure',
 	require => Exec['nodejs-install-1'],
   }
   
   exec{ "nodejs-install-3":
     cwd => '/opt/node',
-    command => 'make', 
+    command => '/opt/node/make', 
     logoutput => 'on_failure',
 	require => Exec['nodejs-install-2'],
   }
   
   exec{ "nodejs-install-4":
     cwd => '/opt/node',
-    command => 'make install', 
+    command => '/opt/node/make install', 
     logoutput => 'on_failure',
 	require => Exec['nodejs-install-3'],
   }
@@ -50,7 +50,7 @@ class pump::statsd {
 	require => Exec['nodejs-install-4'],
   }
   
-  file {"/usr/share/tomcat6/.OpenMRS/openmrs-runtime.properties":
+  file {"/opt/statsd/local.js":
     content => '
   {
  graphitePort: 2003
