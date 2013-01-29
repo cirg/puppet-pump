@@ -14,26 +14,26 @@ exec { 'download-collectd':
 
 exec { 'unzip-collectd':
     cwd     => '/opt/collectd',
-    command => 'tar -zxvf collectd-5.1.1.tar.gz',
+    command => '/bin/tar -zxvf collectd-5.1.1.tar.gz',
 	require => Exec['download-collectd'],
 	timeout => 5000,
   }
   
 exec { 'configure-collectd':
     cwd     => '/opt/collectd/collectd-5.1.1',
-    command => './configure',
+    command => '/opt/collectd/collectd-5.1.1/configure',
 	require => Exec['unzip-collectd'],
   }
   
 exec { 'make-collectd':
     cwd     => '/opt/collectd/collectd-5.1.1',
-    command => 'make',
+    command => '/opt/collectd/collectd-5.1.1/make',
 	require => Exec['configure-collectd'],
   }
   
 exec { 'makeinstall-collectd':
     cwd     => '/opt/collectd/collectd-5.1.1',
-    command => 'make install',
+    command => '/opt/collectd/collectd-5.1.1/make install',
 	require => Exec['make-collectd'],
   }  
 }
