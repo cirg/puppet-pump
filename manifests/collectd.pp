@@ -27,13 +27,13 @@ exec { 'configure-collectd':
   
 exec { 'make-collectd':
     cwd     => '/opt/collectd/collectd-5.1.1',
-    command => './make',
+    command => 'make',
 	require => Exec['configure-collectd'],
   }
   
 exec { 'makeinstall-collectd':
     cwd     => '/opt/collectd/collectd-5.1.1',
-    command => './make install',
+    command => 'make install',
 	require => Exec['make-collectd'],
   }  
 }
