@@ -12,6 +12,7 @@ class pump::statsd {
     command => '/usr/bin/git clone --depth 1 git://github.com/joyent/node.git /opt/node',
     creates => '/opt/node',
     logoutput => 'true',
+	timeout => 5000,
 	require => Package['libssl-dev'],
   }
   

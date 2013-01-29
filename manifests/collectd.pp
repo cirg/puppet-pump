@@ -1,4 +1,11 @@
 class pump::collectd {
+package { [
+    'curl',
+	'build-essential',
+	'libssl-dev',
+  ]:
+    ensure => installed,
+  }
 
 file { '/opt/collectd':,
     ensure => directory,
@@ -10,6 +17,7 @@ exec { 'download-collectd':
     creates => '/opt/collectd/collectd-5.1.1.tar.gz',
     command => '/usr/bin/wget \'http://collectd.org/files/collectd-5.1.1.tar.gz\'',
 	timeout => 5000,
+	require => File['/opt/collectd'],
   }
 
 exec { 'unzip-collectd':
@@ -22,18 +30,18 @@ exec { 'unzip-collectd':
 exec { 'configure-collectd':
     cwd     => '/opt/collectd/collectd-5.1.1',
     command => '/opt/collectd/collectd-5.1.1/configure',
-	require => Exec['unzip-collectd'],
+	require => Package['build-essential'],
   }
-  
+
 exec { 'make-collectd':
     cwd     => '/opt/collectd/collectd-5.1.1',
-    command => '/opt/collectd/collectd-5.1.1/make',
+    command => '/usr/bin/make',
 	require => Exec['configure-collectd'],
   }
   
 exec { 'makeinstall-collectd':
     cwd     => '/opt/collectd/collectd-5.1.1',
-    command => '/opt/collectd/collectd-5.1.1/make install',
+    command => '/usr/bin/make install',
 	require => Exec['make-collectd'],
   }  
 }
