@@ -10,7 +10,7 @@
 # Do NOT "set -e"
 
 PATH=$PATH:/usr/local/bin:/usr/bin:/bin
-NODE_BIN=$(which nodejs||which node)
+NODE_BIN=/opt/node/bin/node
 
 if [ ! -x "$NODE_BIN" ]; then
   echo "Can't find executable nodejs or node in PATH=$PATH"
@@ -22,10 +22,10 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="StatsD"
 NAME=statsd
 DAEMON=$NODE_BIN
-DAEMON_ARGS="/usr/share/statsd/stats.js /etc/statsd/localConfig.js 2>&1 >> /var/log/statsd/statsd.log "
+DAEMON_ARGS="/opt/statsd/stats.js /opt/statsd/local.js 2>&1 >> /var/log/statsd/statsd.log "
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
-CHDIR="/usr/share/statsd"
+CHDIR="/opt/statsd"
 
 # Exit if the package is not installed
 # [ -x "$DAEMON" ] || exit 0
