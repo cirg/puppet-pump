@@ -1,4 +1,6 @@
 class pump::collectd {
+include pump::collectd
+
 package { [
     'curl',
 	'build-essential',
@@ -23,14 +25,14 @@ exec { 'download-collectd':
 exec { 'unzip-collectd':
     cwd     => '/opt/collectd',
     command => '/bin/tar -zxvf collectd-5.1.1.tar.gz',
-	require => Exec['download-collectd'],
-	timeout => 5000,
+    require => Exec['download-collectd'],
+    timeout => 5000,
   }
   
 exec { 'configure-collectd':
     cwd     => '/opt/collectd/collectd-5.1.1',
     command => '/opt/collectd/collectd-5.1.1/configure',
-	require => Package['build-essential'],
+    require => Exec['unzip-collectd'],
   }
 
 exec { 'make-collectd':

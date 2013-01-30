@@ -1,18 +1,12 @@
 class pump::statsd {
 
-  package { [
-    'curl',
-	'build-essential',
-	'libssl-dev',
-  ]:
-    ensure => installed,
-  }
-  
+include pump::collectd
+    
   exec{ 'nodejs-git-clone':
     command => '/usr/bin/git clone --depth 1 git://github.com/joyent/node.git /opt/node',
     creates => '/opt/node',
     logoutput => 'true',
-	timeout => 5000,
+	timeout => -1,
 	require => Package['libssl-dev'],
   }
   
@@ -28,19 +22,22 @@ class pump::statsd {
     command => '/opt/node/configure --prefix=/opt/node', 
     logoutput => 'on_failure',
 	require => Exec['nodejs-install-1'],
+    timeout => -1,
   }
   
   exec{ "nodejs-install-3":
     cwd => '/opt/node',
-    command => '/opt/node/make', 
+    command => '/usr/bin/make', 
     logoutput => 'on_failure',
+    timeout => -1,
 	require => Exec['nodejs-install-2'],
   }
   
   exec{ "nodejs-install-4":
     cwd => '/opt/node',
-    command => '/opt/node/make install', 
+    command => '/usr/bin/make install', 
     logoutput => 'on_failure',
+    timeout => -1,
 	require => Exec['nodejs-install-3'],
   }
   
