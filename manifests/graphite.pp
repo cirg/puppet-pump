@@ -90,7 +90,7 @@ class pump::graphite {
   
   exec { 'graphite-syncdb':
     cwd     => '/opt/graphite/webapp/graphite',
-    command => '/usr/bin/python manage.py syncdb',
+    command => '/usr/bin/python manage.py syncdb --noinput',
 	timeout => 5000,
 	require => File['/opt/graphite/conf/storage-schemas.conf'],
   }
