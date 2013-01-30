@@ -46,4 +46,16 @@ exec { 'makeinstall-collectd':
     command => '/usr/bin/make install',
 	require => Exec['make-collectd'],
   }  
+  
+file { '/etc/init.d/collectd':
+    ensure  => present,
+    source  => 'puppet:///modules/pump/collectd/collectd',
+    require => Exec['makeinstall-collectd'],
+  }  
+
+file { '/opt/collectd/etc/collectd.conf':
+    ensure  => present,
+    source  => 'puppet:///modules/pump/collectd/collectd.conf',
+    require => Exec['makeinstall-collectd'],
+  }
 }
