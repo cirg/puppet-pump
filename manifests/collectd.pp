@@ -58,4 +58,10 @@ file { '/opt/collectd/etc/collectd.conf':
     source  => 'puppet:///modules/pump/collectd/collectd.conf',
     require => Exec['makeinstall-collectd'],
   }
+  
+service { 'collectd':
+    ensure  => 'running',
+    enable  => true,
+    require => File['/etc/init.d/collectd'],
+  }  
 }

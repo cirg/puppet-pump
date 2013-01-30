@@ -59,4 +59,16 @@ include pump::collectd
 }',
   require => Exec['statsd-git-clone'],
   }  
+  
+  file { '/etc/init.d/statsd':
+    ensure  => present,
+    source  => 'puppet:///modules/pump/statsd/statsd',
+    require => Exec['statsd-git-clone'],
+  } 
+  
+  service { 'statsd':
+    ensure  => 'running',
+    enable  => true,
+    require => File['/etc/init.d/statsd'],
+  }  
 }
