@@ -87,6 +87,13 @@ class pump::graphite {
     owner   => 'www-data',
     require => Package['graphite-web'],
   }
+  
+  exec { 'graphite-syncdb':
+    cwd     => '/opt/graphite/webapp/graphite',
+    command => '/usr/bin/python manage.py syncdb',
+	timeout => 5000,
+	require => File['/opt/graphite/conf/storage-schemas.conf'],
+  }
 
   # Carbon init scripts
 
