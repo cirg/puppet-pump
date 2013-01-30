@@ -36,6 +36,6 @@
 # Copyright 2013 Your name here, unless otherwise noted.
 #
 class pump {
-#  include pump::graphite
+  include pump::graphite
   include pump::statsd
 }
