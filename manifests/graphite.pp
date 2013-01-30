@@ -80,7 +80,7 @@ class pump::graphite {
 
   # Ensure webapp/graphite is owned by www-data:www-data
 
-  file { '/opt/graphite/webapp/graphite':
+  file { '/opt/graphite/storage':
     ensure  => directory,
     recurse => true,
     group   => 'www-data',
