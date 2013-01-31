@@ -12,6 +12,7 @@ class pump::graphite {
     'python-pip',
     'python-pysqlite2',
     'python-twisted',
+	'python-mysqldb'
   ]:
     ensure => installed,
   }
