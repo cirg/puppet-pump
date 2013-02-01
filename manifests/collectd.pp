@@ -5,6 +5,7 @@ package { [
     'curl',
 	'build-essential',
 	'libssl-dev',
+	'netcat',
   ]:
     ensure => installed,
   }
