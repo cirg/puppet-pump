@@ -38,5 +38,4 @@
 class pump {
   include pump::graphite
   include pump::statsd
-  include pump::collectd
 }

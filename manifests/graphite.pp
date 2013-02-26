@@ -12,6 +12,7 @@ class pump::graphite {
     'python-pip',
     'python-pysqlite2',
     'python-twisted',
+	'python-mysqldb'
   ]:
     ensure => installed,
   }
@@ -80,12 +81,19 @@ class pump::graphite {
 
   # Ensure webapp/graphite is owned by www-data:www-data
 
-  file { '/opt/graphite/webapp/graphite':
+  file { '/opt/graphite/storage':
     ensure  => directory,
     recurse => true,
     group   => 'www-data',
     owner   => 'www-data',
     require => Package['graphite-web'],
+  }
+  
+  exec { 'graphite-syncdb':
+    cwd     => '/opt/graphite/webapp/graphite',
+    command => '/usr/bin/python manage.py syncdb --noinput',
+	timeout => 5000,
+	require => File['/opt/graphite/conf/storage-schemas.conf'],
   }
 
   # Carbon init scripts
