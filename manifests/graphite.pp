@@ -61,12 +61,6 @@ class pump::graphite {
     require => Package['graphite-web'],
   }
 
-  file { '/opt/graphite/conf/relay-rules.conf':
-    ensure  => present,
-    source  => 'puppet:///modules/pump/graphite/relay-rules.conf',
-    require => Package['graphite-web'],
-  }
-
   file { '/opt/graphite/conf/storage-aggregation.conf':
     ensure  => present,
     source  => 'puppet:///modules/pump/graphite/storage-aggregation.conf',
@@ -109,19 +103,6 @@ class pump::graphite {
     ensure  => 'running',
     enable  => true,
     require => File['/etc/init.d/carbon-cache'],
-  }
-
-  file { '/etc/init.d/carbon-relay':
-    ensure  => present,
-    source  => 'puppet:///modules/pump/graphite/carbon-relay',
-    mode    => '0755',
-    require => Package['carbon'],
-  }
-
-  service { 'carbon-relay':
-    ensure  => 'running',
-    enable  => true,
-    require => File['/etc/init.d/carbon-relay'],
   }
 
   # Apache configuration

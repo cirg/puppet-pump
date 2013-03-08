@@ -1,6 +1,6 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides:          carbon-relay
+# Provides:          carbon-cache
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
@@ -20,7 +20,7 @@
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Description of the service"
-NAME=carbon-relay
+NAME=carbon-cache
 DAEMON=/opt/graphite/bin/$NAME.py
 DAEMON_ARGS=" start"
 PIDFILE=/var/run/$NAME.pid

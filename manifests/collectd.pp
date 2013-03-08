@@ -1,5 +1,4 @@
 class pump::collectd {
-include pump::collectd
 
 package { [
     'curl',
@@ -52,6 +51,11 @@ file { '/etc/init.d/collectd':
     ensure  => present,
     source  => 'puppet:///modules/pump/collectd/collectd',
     require => Exec['makeinstall-collectd'],
+  }  
+
+file { '/etc/default/collectd':
+    ensure  => present,
+    source  => 'puppet:///modules/pump/collectd/etc-default-collectd',
   }  
 
 file { '/opt/collectd/etc/collectd.conf':

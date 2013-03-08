@@ -1,6 +1,7 @@
 # == Class: pump
 #
-# Full description of class pump here.
+# Installs suite of tools used for collection, storage and
+# visualization of system and application data and utilization.
 #
 # === Parameters
 #
@@ -29,13 +30,17 @@
 #
 # === Authors
 #
-# Author Name <author@domain.com>
+# Anikate Singh <aniksing@uw.edu>
+# Paul Bugni <pbugni@u.washington.edu>
 #
 # === Copyright
 #
-# Copyright 2013 Your name here, unless otherwise noted.
+# Copyright 2013 University of Washington
 #
 class pump {
   include pump::graphite
   include pump::statsd
+  include pump::pump_rsync
+  include pump::post_install_daemon
+  include pump::examples
 }

@@ -54,6 +54,7 @@ include pump::collectd
  graphitePort: 2003
 , graphiteHost: "localhost"
 , port: 8125
+, globalPrefix: "NOT_INITIALIZED."
 , backends: [ "./backends/graphite" ]
 , flushInterval: 1000
 }',
