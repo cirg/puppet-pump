@@ -3,7 +3,7 @@ class pump::examples {
 file { '/opt/pump/bin/kenyaemr_sample_query_to_statsd':
     ensure  => present,
     mode => '0755',
-    source => 'puppet:///modules/pump/examples/kenyaerm_sample_query_to_statsd.sh',
+    source => 'puppet:///modules/pump/examples/kenyaemr_sample_query_to_statsd.sh',
     require => File['/opt/pump/bin'],
   }
 

@@ -16,7 +16,7 @@ file { '/opt/pump/bin/pump_rsync':
     ensure  => present,
     mode => '0755',
     require => File['/opt/pump/bin'],
-    content => 'rsync -az /opt/graphite/storage/whisper/ ${username}@pump.kenyaemr.org:/opt/graphite/storage/whisper',
+    content => "rsync -az /opt/graphite/storage/whisper/ ${username}@pump.kenyaemr.org:/opt/graphite/storage/whisper",
   }
 
 user { $username:
