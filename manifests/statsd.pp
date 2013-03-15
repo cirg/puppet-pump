@@ -61,7 +61,7 @@ include pump::collectd
 ,   prefixCounter: ""
 ,   prefixTimer: ""
 ,   prefixGauge: ""
-,   prefixSet: ""
+,   prefixSet: "" }
 }',
   require => Exec['statsd-git-clone'],
   }  

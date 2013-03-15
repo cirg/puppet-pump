@@ -19,9 +19,11 @@ file { '/etc/init.d/pump_post_install_daemon':
     require => File['/opt/pump/bin/pump_post_install_daemon'],
   }
 
+# Require also the files that get edited, as race conditions exist
+# between multiple puppet threads
 service { 'pump_post_install_daemon':
     ensure  => 'running',
     enable  => true,
-    require => File['/etc/init.d/pump_post_install_daemon'],
+    require => [File['/opt/statsd/local.js'], File['/opt/collectd/etc/collectd.conf'], File['/etc/init.d/pump_post_install_daemon']],
   }  
 }
