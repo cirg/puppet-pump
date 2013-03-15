@@ -1,5 +1,6 @@
 class pump::pump_rsync {
 $username = 'pump_rsync_user'
+$groupname = 'www-data'
 
 file { '/opt/pump':,
     ensure => directory,
@@ -14,9 +15,9 @@ file { '/opt/pump/bin':,
 
 file { '/opt/pump/bin/pump_rsync':
     ensure  => present,
-    mode => '0755',
+    mode    => '0755',
+    source  => 'puppet:///modules/pump/pump_rsync/pump_rsync',
     require => File['/opt/pump/bin'],
-    content => "rsync -az /opt/graphite/storage/whisper/ ${username}@pump.kenyaemr.org:/opt/graphite/storage/whisper",
   }
 
 user { $username:
@@ -25,28 +26,28 @@ user { $username:
     shell   => "/bin/bash",
   }
 
-group { 'pump_rsync_user':
+group { $groupname:
     require => User[$username]
   }
 
 cron { 'cron_rsync':
     command => '/opt/pump/bin/pump_rsync',
-    user => $username,
+    user => 'root',
     minute => '*/10',
   }
 
 file { "/home/$username/":
     ensure  => directory,
     owner   => $username,
-    group   => $username,
+    group   => $groupname,
     mode    => 750,
-    require => [ User[$username], Group[$username] ]
+    require => [ User[$username], Group[$groupname] ]
   }
 
 file { "/home/$username/.ssh":
     ensure  => directory,
     owner   => $username,
-    group   => $username,
+    group   => $groupname,
     mode    => 700,
     require => File["/home/$username/"]
   }

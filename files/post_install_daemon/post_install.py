@@ -160,12 +160,17 @@ class ConfigFile(object):
         with open(self.name, 'r') as config:
             contents = config.read()
 
+        results = []
         with open(self.name, 'w') as config:
-            config.write(contents.replace(PUMP_UNINITIALIZED_PREFIX,
-                                          prefix,))
-        logging.info("New PUMP prefix: '%s' written to %s", prefix,
-                     self.name)
-        return True
+            line = contents.replace(PUMP_UNINITIALIZED_PREFIX,
+                                    prefix,)
+            config.write(line)
+            results.append(line)
+        if ''.join(results) != contents:
+            logging.info("New PUMP prefix: '%s' written to %s", prefix,
+                         self.name)
+            return True
+        return False
 
     def restart(self):
         """Attempt a restart using the init_file provided at instantiation"""
@@ -278,18 +283,19 @@ class PumpPostInstall(object):
 
     def persist_data(self):
         """Store prefix in puppet config for subsequent runs. """
-        logging.debug("persisting pump_prefix: '%s'", self.pump_prefix)
-        self.plc.set(PUMP_PREFIX_KEY, self.pump_prefix)
+        if self.plc.get(PUMP_PREFIX_KEY) != self.pump_prefix:
+            logging.debug("persisting pump_prefix: '%s'", self.pump_prefix)
+            self.plc.set(PUMP_PREFIX_KEY, self.pump_prefix)
 
     def main(self):
         logging.info("Launch time")
         while not self.satisfied():
-            if self.poll_for_data():
-                self.handle_new_prefix(self.pump_prefix)
-            else:
+            if not self.poll_for_data():
                 wait_interval = 2
                 logging.debug("sleep(%d)", wait_interval)
                 time.sleep(wait_interval)
+
+        self.handle_new_prefix(self.pump_prefix)
         logging.info("Exit time")
 
 

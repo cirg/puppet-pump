@@ -1,0 +1,21 @@
+#!/bin/sh
+# Uploads all files found in graphite's whisper directory, to the central
+# hub `pump.kenyaemr.org`.  This file is typically part of a cron job in
+# the root users crontab.
+
+# carbon-cache (and potentially other carbon daemons) create whisper files
+# as configured when receiving any metrics or data.  For security reasons
+# the syncronization user is only used for uploading from each remote host
+# to the hub.  As carbon-cache doesn't accept a umask flag at this time, we
+# must manually modify group permissions for the rsync to function.
+
+# Require group write & execute on any newly created directories
+find /opt/graphite/storage/whisper/ -type d \! -perm -g=wx -exec chmod g+wx {} \;
+
+# Require group write on any newly created files
+find /opt/graphite/storage/whisper/ -type f \! -perm -g=w -exec chmod g+w {} \;
+
+# Due to a bug in rsync, must omit directory times ('-O') as the rsync
+# user isn't the directory owner on the target system
+RSYNC_USER=pump_rsync_user
+su $RSYNC_USER -c "rsync -Oaz /opt/graphite/storage/whisper/ $RSYNC_USER@pump.kenyaemr.org:/opt/graphite/storage/whisper"

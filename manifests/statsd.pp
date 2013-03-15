@@ -54,9 +54,14 @@ include pump::collectd
  graphitePort: 2003
 , graphiteHost: "localhost"
 , port: 8125
-, globalPrefix: "NOT_INITIALIZED."
 , backends: [ "./backends/graphite" ]
 , flushInterval: 1000
+, graphite: { legacyNamespace: false
+,   globalPrefix: "NOT_INITIALIZED."
+,   prefixCounter: ""
+,   prefixTimer: ""
+,   prefixGauge: ""
+,   prefixSet: ""
 }',
   require => Exec['statsd-git-clone'],
   }  
