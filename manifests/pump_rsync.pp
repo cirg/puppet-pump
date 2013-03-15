@@ -22,12 +22,9 @@ file { '/opt/pump/bin/pump_rsync':
 
 user { $username:
     comment => "user authenticated to rsync with hub",
+    gid     => "$groupname",
     home    => "/home/$username",
     shell   => "/bin/bash",
-  }
-
-group { $groupname:
-    require => User[$username]
   }
 
 cron { 'cron_rsync':
@@ -41,7 +38,7 @@ file { "/home/$username/":
     owner   => $username,
     group   => $groupname,
     mode    => 750,
-    require => [ User[$username], Group[$groupname] ]
+    require => User[$username],
   }
 
 file { "/home/$username/.ssh":
