@@ -256,7 +256,7 @@ class PumpPostInstall(object):
             mfl = cursor.fetchone()[0]
             # For time being, the MFL alone is our lable with a
             # defining prefix
-            self.pump_prefix = "MFL_%s." % mfl
+            self.pump_prefix = "MFL_%s" % mfl
             return self.pump_prefix
 
         finally:
