@@ -49,6 +49,18 @@ class pump::graphite {
     require => Package['graphite-web'],
   }
 
+  file { '/opt/graphite/conf/whitelist.conf':
+    ensure  => present,
+    source  => 'puppet:///modules/pump/graphite/whitelist.conf',
+    require => Package['graphite-web'],
+  }
+
+  file { '/opt/graphite/conf/blacklist.conf':
+    ensure  => present,
+    source  => 'puppet:///modules/pump/graphite/blacklist.conf',
+    require => Package['graphite-web'],
+  }
+
   file { '/opt/graphite/conf/dashboard.conf':
     ensure  => present,
     source  => 'puppet:///modules/pump/graphite/dashboard.conf',
