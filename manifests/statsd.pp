@@ -55,7 +55,7 @@ include pump::collectd
 , graphiteHost: "localhost"
 , port: 8125
 , backends: [ "./backends/graphite" ]
-, flushInterval: 1000
+, flushInterval: 60000
 , graphite: { legacyNamespace: false
 ,   globalPrefix: "NOT_INITIALIZED."
 ,   prefixCounter: ""
