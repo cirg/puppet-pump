@@ -12,13 +12,13 @@ licenses:
 
 - Graphite: The Apache 2.0 License
   <http://www.apache.org/licenses/LICENSE-2.0.html>
-- collectd:  GNU General Public License, version 2 
-
-Contact
--------
-
+- collectd: GNU General Public License, version 2
+  <http://www.gnu.org/licenses/gpl-2.0.html>
+- statsd: MIT
+  <https://github.com/etsy/statsd/blob/master/LICENSE>
 
 Support
 -------
 
-Please log tickets and issues at our [Projects site](http://projects.example.com)
+Please log tickets and issues on the project 
+[issue tracker](https://github.com/cirg/puppet-pump/issues)
