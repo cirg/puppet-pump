@@ -43,4 +43,5 @@ class pump {
   include pump::pump_rsync
   include pump::post_install_daemon
   include pump::examples
+  include pump::kenyaemr_indicators
 }
