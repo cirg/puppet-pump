@@ -1,5 +1,5 @@
 class pump::graphite {
-  include apache
+  include appliance_components::apache
 
   # Packages
 
@@ -12,7 +12,7 @@ class pump::graphite {
     'python-pip',
     'python-pysqlite2',
     'python-twisted',
-	'python-mysqldb'
+    'python-mysqldb'
   ]:
     ensure => installed,
   }
@@ -124,6 +124,7 @@ class pump::graphite {
     source  => 'puppet:///modules/pump/pump.conf',
     require => [
       Package['httpd'],
+      Package['ssl-cert'],
     ],
     notify  => Service['httpd'],
   }
