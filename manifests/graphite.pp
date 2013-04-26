@@ -121,7 +121,7 @@ class pump::graphite {
 
   file { '/etc/apache2/conf.d/pump.conf':
     ensure  => present,
-    source  => 'puppet:///modules/pump/pump.conf',
+    source  => 'puppet:///modules/pump/graphite/pump.conf',
     require => [
       Package['httpd'],
       Package['ssl-cert'],

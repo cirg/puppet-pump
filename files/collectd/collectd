@@ -9,7 +9,7 @@
 
 ### BEGIN INIT INFO
 # Provides:          collectd
-# Required-Start:    $local_fs $remote_fs
+# Required-Start:    $local_fs $remote_fs carbon-cache
 # Required-Stop:     $local_fs $remote_fs
 # Should-Start:      $network $named $syslog $time
 # Should-Stop:       $network $named $syslog

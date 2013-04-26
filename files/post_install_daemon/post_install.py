@@ -16,8 +16,10 @@ restarts the respective services.
 import argparse
 import logging
 import os
+import sys
 import subprocess
 import time
+import traceback
 import yaml
 import MySQLdb
 import ConfigParser
@@ -79,8 +81,15 @@ class MysqlAccess(object):
         returns tuple (user,passwd,host)
 
         """
+        # work around a bootstrap problem when invoked by init script
+        # before user directory correctly resoves...
+        path = os.path.join(os.path.expanduser('~'), '.my.cnf')
+        if path == '/.my.cnf' and os.getuid() == 0:
+            path = '/root/.my.cnf'
+
         cp = ConfigParser.ConfigParser()
-        cp.readfp(open(os.path.join(os.path.expanduser('~'), '.my.cnf')))
+        with open(path, 'r') as mycnf:
+            cp.readfp(mycnf)
         user = cp.get('client', 'user')
         pw = cp.get('client', 'password')
         host = cp.get('client', 'host')
@@ -229,7 +238,9 @@ class PumpPostInstall(object):
             cursor = db.cursor()
             cursor.execute("SELECT property_value FROM global_property"
                            " WHERE property = 'kenyaemr.defaultLocation'")
-            location_id = cursor.fetchone()[0]
+
+            row = cursor.fetchone()
+            location_id = row[0] if row else None
             # Prior to first Open MRS run, this may be null
             if location_id is None:
                 logging.debug("'kenyaemr.defaultLocation' not yet set")
@@ -260,8 +271,10 @@ class PumpPostInstall(object):
             return self.pump_prefix
 
         finally:
-            cursor.close()
-            db.close()
+            if 'cursor' in locals():
+                cursor.close()
+            if 'db' in locals():
+                db.close()
 
     def handle_new_prefix(self, prefix):
         """Called once when new data is found
@@ -288,17 +301,21 @@ class PumpPostInstall(object):
             self.plc.set(PUMP_PREFIX_KEY, self.pump_prefix)
 
     def main(self):
+        wait_interval = 5
         logging.info("Launch time")
+        time.sleep(wait_interval)
         while not self.satisfied():
             if not self.poll_for_data():
-                wait_interval = 2
                 logging.debug("sleep(%d)", wait_interval)
                 time.sleep(wait_interval)
-
         self.handle_new_prefix(self.pump_prefix)
         logging.info("Exit time")
 
 
+def log_uncaught_exceptions(type, value, tb):
+    logging.critical(''.join(traceback.format_tb(tb)))
+    logging.critical('{0}: {1}'.format(type, value))
+    
 def configure_logging(logfile, verbosity=0):
     """Configure logging - sent to stdout so redirection works"""
     kwargs = {'format': '%(asctime)s [%(levelname)s] %(message)s',
@@ -308,6 +325,7 @@ def configure_logging(logfile, verbosity=0):
     kwargs['level'] = level[verbosity]
     kwargs['filename'] = logfile
     logging.basicConfig(**kwargs)
+    sys.excepthook = log_uncaught_exceptions
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
