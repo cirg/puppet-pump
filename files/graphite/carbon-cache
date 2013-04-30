@@ -26,4 +26,5 @@ SCRIPTNAME=/etc/init.d/$NAME
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
 
 # carbon-cache handles its own daemonizing
+logger $NAME "$@"
 exec $DAEMON "$@"

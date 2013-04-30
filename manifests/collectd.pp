@@ -67,6 +67,6 @@ file { '/opt/collectd/etc/collectd.conf':
 service { 'collectd':
     ensure  => 'running',
     enable  => true,
-    require => File['/etc/init.d/collectd'],
+    require => [File['/etc/init.d/collectd'], Service['carbon-cache']],
   }  
 }

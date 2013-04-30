@@ -9,32 +9,25 @@
 
 ### BEGIN INIT INFO
 # Provides:          collectd
-# Required-Start:    $local_fs $remote_fs carbon-cache
-# Required-Stop:     $local_fs $remote_fs
-# Should-Start:      $network $named $syslog $time
-# Should-Stop:       $network $named $syslog
+# Required-Start:    $local_fs $remote_fs $syslog carbon-cache
+# Required-Stop:     $local_fs $remote_fs $syslog carbon-cache
+# Should-Start:      $network $named $time
+# Should-Stop:       $network $named
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: start the statistics collection daemon
 ### END INIT INFO
 
-set -e
-
 PATH=/sbin:/bin:/usr/sbin:/usr/bin:/opt/collectd/sbin
-
 DISABLE=0
-
 DESC="statistics collection and monitoring daemon"
 NAME=collectd
 DAEMON=/opt/collectd/sbin/collectd
-
 CONFIGFILE=/opt/collectd/etc/collectd.conf
 PIDFILE=/var/run/collectd.pid
-
 USE_COLLECTDMON=1
 COLLECTDMON_DAEMON=/opt/collectd/sbin/collectdmon
 COLLECTDMON_PIDFILE=/var/run/collectdmon.pid
-
 MAXWAIT=30
 
 # Gracefully exit if the package has been removed.
@@ -45,12 +38,12 @@ if [ -r /etc/default/$NAME ]; then
 fi
 
 if test "$DISABLE" != 0 -a "$1" == "start"; then
-	echo "$NAME has been disabled - see /etc/default/$NAME."
+	logger -s "$NAME has been disabled - see /etc/default/$NAME."
 	exit 0
 fi
 
 if test ! -e "$CONFIGFILE" -a "$1" == "start"; then
-	echo "Not starting $NAME - no configuration ($CONFIGFILE) found."
+	logger -s "Not starting $NAME - no configuration ($CONFIGFILE) found."
 	exit 0
 fi
 
@@ -74,6 +67,7 @@ check_config() {
 }
 
 d_start() {
+    logger $NAME start
 	if test "$DISABLE" != 0; then
 		# we get here during restart
 		echo -n " - disabled by /etc/default/$NAME"
@@ -103,6 +97,7 @@ In large setups it might take some time to write all pending data to
 the disk. You can adjust the waiting time in /etc/default/collectd."
 
 d_stop() {
+    logger $NAME stop
 	PID=$( cat "$_PIDFILE" 2> /dev/null ) || true
 
 	start-stop-daemon --stop --quiet --oknodo --pidfile "$_PIDFILE"

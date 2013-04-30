@@ -15,7 +15,7 @@ file { '/opt/pump/bin/pump_post_install_daemon':
 
 file { '/etc/init.d/pump_post_install_daemon':
     ensure  => present,
-    source  => 'puppet:///modules/pump/post_install_daemon/init',
+    source  => 'puppet:///modules/pump/post_install_daemon/pump_post_install_daemon',
     require => File['/opt/pump/bin/pump_post_install_daemon'],
   }
 

@@ -75,6 +75,6 @@ include pump::collectd
   service { 'statsd':
     ensure  => 'running',
     enable  => true,
-    require => File['/etc/init.d/statsd'],
+    require => [File['/etc/init.d/statsd'], Service['carbon-cache']],
   }  
 }
