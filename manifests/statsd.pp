@@ -55,7 +55,13 @@ include pump::collectd
 , graphiteHost: "localhost"
 , port: 8125
 , backends: [ "./backends/graphite" ]
-, flushInterval: 1000
+, flushInterval: 60000
+, graphite: { legacyNamespace: false
+,   globalPrefix: "NOT_INITIALIZED."
+,   prefixCounter: ""
+,   prefixTimer: ""
+,   prefixGauge: ""
+,   prefixSet: "" }
 }',
   require => Exec['statsd-git-clone'],
   }  
@@ -69,6 +75,6 @@ include pump::collectd
   service { 'statsd':
     ensure  => 'running',
     enable  => true,
-    require => File['/etc/init.d/statsd'],
+    require => [File['/etc/init.d/statsd'], Service['carbon-cache']],
   }  
 }

@@ -1,16 +1,24 @@
-pump
+pump - Performance and Usage Monitoring Program
+===============================================
 
-This is the pump module.
+This is the pump module, effectively a collection of open source tools
+installed and configured to collect and display application and system
+metrics.
 
 License
 -------
+Being a collection of tools, one should refer to the respective
+licenses:
 
-
-Contact
--------
-
+- Graphite: The Apache 2.0 License
+  <http://www.apache.org/licenses/LICENSE-2.0.html>
+- collectd: GNU General Public License, version 2
+  <http://www.gnu.org/licenses/gpl-2.0.html>
+- statsd: MIT
+  <https://github.com/etsy/statsd/blob/master/LICENSE>
 
 Support
 -------
 
-Please log tickets and issues at our [Projects site](http://projects.example.com)
+Please log tickets and issues on the project 
+[issue tracker](https://github.com/cirg/puppet-pump/issues)

@@ -1,8 +1,8 @@
 #! /bin/sh
 ### BEGIN INIT INFO
 # Provides:          statsd
-# Required-Start:    $network $local_fs
-# Required-Stop:
+# Required-Start:    $network $local_fs $remote_fs $syslog carbon-cache
+# Required-Stop:     $syslog carbon-cache
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 ### END INIT INFO
@@ -22,13 +22,14 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="StatsD"
 NAME=statsd
 DAEMON=$NODE_BIN
-DAEMON_ARGS="/opt/statsd/stats.js /opt/statsd/local.js 2>&1 >> /var/log/statsd/statsd.log "
+DAEMON_ARGS="/opt/statsd/stats.js /opt/statsd/local.js" 
 PIDFILE=/var/run/$NAME.pid
+LOGFILE=/var/log/$NAME.log
 SCRIPTNAME=/etc/init.d/$NAME
 CHDIR="/opt/statsd"
 
 # Exit if the package is not installed
-# [ -x "$DAEMON" ] || exit 0
+[ -x "$DAEMON" ] || exit 0
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
@@ -45,14 +46,15 @@ CHDIR="/opt/statsd"
 #
 do_start()
 {
+    logger $NAME start
 	# Return
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
 	start-stop-daemon --start --quiet -m --pidfile $PIDFILE --startas $DAEMON --background --test > /dev/null \
 		|| return 1
-	start-stop-daemon --start --quiet -m --pidfile $PIDFILE --startas $DAEMON --background --chdir $CHDIR -- \
-		$DAEMON_ARGS > /dev/null 2> /var/log/$NAME-stderr.log \
+	start-stop-daemon --start -m --pidfile $PIDFILE --startas $DAEMON --background --chdir $CHDIR -- \
+		$DAEMON_ARGS >> $LOGFILE 2>&1 \
 		|| return 2
 	# Add code here, if necessary, that waits for the process to be ready
 	# to handle requests from services started subsequently which depend
@@ -64,6 +66,7 @@ do_start()
 #
 do_stop()
 {
+    logger $NAME stop
 	# Return
 	#   0 if daemon has been stopped
 	#   1 if daemon was already stopped
@@ -155,4 +158,4 @@ case "$1" in
 	;;
 esac
 
-:
+exit 0

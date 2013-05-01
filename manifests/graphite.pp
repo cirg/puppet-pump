@@ -1,5 +1,5 @@
 class pump::graphite {
-  include apache
+  include appliance_components::apache
 
   # Packages
 
@@ -12,7 +12,7 @@ class pump::graphite {
     'python-pip',
     'python-pysqlite2',
     'python-twisted',
-	'python-mysqldb'
+    'python-mysqldb'
   ]:
     ensure => installed,
   }
@@ -49,6 +49,18 @@ class pump::graphite {
     require => Package['graphite-web'],
   }
 
+  file { '/opt/graphite/conf/whitelist.conf':
+    ensure  => present,
+    source  => 'puppet:///modules/pump/graphite/whitelist.conf',
+    require => Package['graphite-web'],
+  }
+
+  file { '/opt/graphite/conf/blacklist.conf':
+    ensure  => present,
+    source  => 'puppet:///modules/pump/graphite/blacklist.conf',
+    require => Package['graphite-web'],
+  }
+
   file { '/opt/graphite/conf/dashboard.conf':
     ensure  => present,
     source  => 'puppet:///modules/pump/graphite/dashboard.conf',
@@ -58,12 +70,6 @@ class pump::graphite {
   file { '/opt/graphite/conf/graphite.wsgi':
     ensure  => present,
     source  => 'puppet:///modules/pump/graphite/graphite.wsgi',
-    require => Package['graphite-web'],
-  }
-
-  file { '/opt/graphite/conf/relay-rules.conf':
-    ensure  => present,
-    source  => 'puppet:///modules/pump/graphite/relay-rules.conf',
     require => Package['graphite-web'],
   }
 
@@ -111,26 +117,14 @@ class pump::graphite {
     require => File['/etc/init.d/carbon-cache'],
   }
 
-  file { '/etc/init.d/carbon-relay':
-    ensure  => present,
-    source  => 'puppet:///modules/pump/graphite/carbon-relay',
-    mode    => '0755',
-    require => Package['carbon'],
-  }
-
-  service { 'carbon-relay':
-    ensure  => 'running',
-    enable  => true,
-    require => File['/etc/init.d/carbon-relay'],
-  }
-
   # Apache configuration
 
   file { '/etc/apache2/conf.d/pump.conf':
     ensure  => present,
-    source  => 'puppet:///modules/pump/pump.conf',
+    source  => 'puppet:///modules/pump/graphite/pump.conf',
     require => [
       Package['httpd'],
+      Package['ssl-cert'],
     ],
     notify  => Service['httpd'],
   }

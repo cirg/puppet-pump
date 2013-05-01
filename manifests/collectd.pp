@@ -1,5 +1,4 @@
 class pump::collectd {
-include pump::collectd
 
 package { [
     'curl',
@@ -54,6 +53,11 @@ file { '/etc/init.d/collectd':
     require => Exec['makeinstall-collectd'],
   }  
 
+file { '/etc/default/collectd':
+    ensure  => present,
+    source  => 'puppet:///modules/pump/collectd/etc-default-collectd',
+  }  
+
 file { '/opt/collectd/etc/collectd.conf':
     ensure  => present,
     source  => 'puppet:///modules/pump/collectd/collectd.conf',
@@ -63,6 +67,6 @@ file { '/opt/collectd/etc/collectd.conf':
 service { 'collectd':
     ensure  => 'running',
     enable  => true,
-    require => File['/etc/init.d/collectd'],
+    require => [File['/etc/init.d/collectd'], Service['carbon-cache']],
   }  
 }

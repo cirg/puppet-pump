@@ -1,0 +1,4 @@
+Module designed to be run as an init script (i.e. from /etc/init.d/),
+with the responsibility of gathering and plugging in initialization
+data that isn't ready at install time, specifically for the PUMP
+toolchain.
