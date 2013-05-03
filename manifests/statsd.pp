@@ -1,6 +1,4 @@
 class pump::statsd {
-
-include pump::collectd
     
   exec{ 'nodejs-git-clone':
     command => '/usr/bin/git clone --depth 1 git://github.com/joyent/node.git /opt/node',

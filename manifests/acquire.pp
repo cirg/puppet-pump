@@ -17,6 +17,7 @@ file { '/opt/pump/bin/check_host':
 cron { 'pump_check_host':
     command => '/opt/pump/bin/check_host',
     minute => '*',
-    require => File['/opt/pump/bin/check_host'],
+    require => [File['/opt/pump/bin/check_host'],
+    	        Package['python-statsd']]
   }
 }

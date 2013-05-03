@@ -15,6 +15,7 @@
 class pump {
   include pump::acquire
   include pump::graphite
+  include pump::collectd
   include pump::statsd
   include pump::pump_rsync
   include pump::post_install_daemon
