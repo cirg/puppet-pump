@@ -270,6 +270,9 @@ class PumpPostInstall(object):
             self.pump_prefix = "MFL_%s" % mfl
             return self.pump_prefix
 
+        except:
+            logging.error(sys.exc_info())
+
         finally:
             if 'cursor' in locals():
                 cursor.close()
